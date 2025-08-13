@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wire-message.schema.json",
+  "oneOf": [
+    { "$ref": "#/$defs/event" },
+    { "$ref": "#/$defs/ack" }
+  ],
+  "$defs": {
+    "uuid": { "type": "string", "format": "uuid" },
+    "actor": {
+      "type": "object",
+      "required": ["userId", "role", "deviceId"],
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "displayName": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "eventType", "showId", "createdAt", "actor", "payload"],
+      "properties": {
+        "kind": { "const": "event" },
+        "version": { "type": "string" },
+        "messageId": { "$ref": "#/$defs/uuid" },
+        "eventType": { "type": "string" },
+        "showId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "payload": { "type": "object" },
+        "patch": {
+          "type": "array",
+          "items": { "type": "object" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ack": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "ackOf", "status", "createdAt"],
+      "properties": {
+        "kind": { "const": "ack" },
+        "version": { "type": "string" },
+        "messageId": { "$ref": "#/$defs/uuid" },
+        "ackOf": { "$ref": "#/$defs/uuid" },
+        "status": { "enum": ["ok", "error"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "eventSeq": { "type": "integer" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "code": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
