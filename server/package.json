@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Minimal WebSocket server stub for PaceBuddy",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node -e \"console.log('No tests specified')\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
