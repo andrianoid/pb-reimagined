@@ -5,6 +5,18 @@ const path = require('path');
 
 const schema = JSON.parse(fs.readFileSync(path.join(__dirname, 'schemas', 'wire-message.schema.json'), 'utf8'));
 
+// simple in-memory credential stores
+const tokenStore = {
+  'token-admin': { role: 'admin' },
+  'token-viewer': { role: 'viewer' }
+};
+const sessionStore = {
+  'session-admin': { role: 'admin' },
+  'session-viewer': { role: 'viewer' }
+};
+
+const EVENT_SENDER_ROLES = new Set(['admin']);
+
 function uuid() {
   return crypto.randomUUID();
 }
@@ -83,6 +95,26 @@ function parse(buffer) {
   return payload.toString('utf8');
 }
 
+function parseCookies(header = '') {
+  return header.split(';').reduce((acc, cookie) => {
+    const [k, v] = cookie.split('=').map((c) => c && c.trim());
+    if (k && v) acc[k] = v;
+    return acc;
+  }, {});
+}
+
+function authenticate(req) {
+  const url = new URL(req.url, `http://${req.headers.host}`);
+  const token = url.searchParams.get('token');
+  if (token && tokenStore[token]) return tokenStore[token];
+
+  const cookies = parseCookies(req.headers.cookie || '');
+  const sessionId = cookies.sessionId;
+  if (sessionId && sessionStore[sessionId]) return sessionStore[sessionId];
+
+  return null;
+}
+
 const clients = new Set();
 let eventSeq = 0;
 
@@ -101,6 +133,12 @@ server.on('upgrade', (req, socket) => {
     socket.end('HTTP/1.1 400 Bad Request');
     return;
   }
+  const user = authenticate(req);
+  if (!user) {
+    socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+    socket.destroy();
+    return;
+  }
   const acceptKey = generateAcceptValue(req.headers['sec-websocket-key']);
   const headers = [
     'HTTP/1.1 101 Switching Protocols',
@@ -109,6 +147,7 @@ server.on('upgrade', (req, socket) => {
     `Sec-WebSocket-Accept: ${acceptKey}`
   ];
   socket.write(headers.concat('\r\n').join('\r\n'));
+  socket.user = user;
   clients.add(socket);
 
   socket.on('data', (buffer) => {
@@ -141,6 +180,18 @@ server.on('upgrade', (req, socket) => {
         ackOf: msg.messageId,
         status: 'error',
         errors
+      }));
+      socket.write(ack);
+      return;
+    }
+    if (!EVENT_SENDER_ROLES.has(socket.user.role)) {
+      const ack = frame(JSON.stringify({
+        kind: 'ack',
+        version: msg.version || '1.0.0',
+        messageId: uuid(),
+        ackOf: msg.messageId,
+        status: 'error',
+        code: 'UNAUTHORIZED_ROLE'
       }));
       socket.write(ack);
       return;

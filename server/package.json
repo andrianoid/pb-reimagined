@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node -e \"console.log('No tests specified')\""
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ajv": "^8.12.0",
+    "mocha": "^10.2.0"
+  }
 }
