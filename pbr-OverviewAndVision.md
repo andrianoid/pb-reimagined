@@ -39,4 +39,6 @@ This repo currently contains:
 ---
 
 ## License
-TBD
+
+This project is licensed under the [MIT License](LICENSE.md).
+
