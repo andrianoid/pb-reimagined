@@ -9,13 +9,13 @@ pbr-Schema:
 
 Use these schemas with a Draft 2020-12 validator (e.g., [Ajv](https://ajv.js.org)) to validate messages on the wire.
 [[pbr-MVP_Plan]]
-![[pacebuddy_mvp_event_flow.png]]
+![PaceBuddy MVP event flow](pacebuddy_mvp_event_flow.png)
 
-![[performer_view_wireframe.png]]
+![Performer view wireframe](design/performer_view_wireframe.png)
 
-![[stage_manager_view_wireframe.png]]
+![Stage manager view wireframe](design/stage_manager_view_wireframe.png)
 
-![[director_view_wireframe.png]]
+![Director view wireframe](design/director_view_wireframe.png)
 
 
 
