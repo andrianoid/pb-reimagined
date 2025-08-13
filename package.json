@@ -1,0 +1,11 @@
+{
+  "name": "pacebuddy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0"
+  }
+}
