@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import test from 'node:test';
 import assert from 'node:assert';
-import Ajv from 'ajv';
+import Ajv from 'ajv/dist/2020.js';
 
 const schemaPath = join('schema', 'show-event.schema.json');
 const schema = JSON.parse(readFileSync(schemaPath, 'utf8'));
