@@ -1,7 +1,7 @@
 # Architecture Overview
 
 ## Core Components
-- **JSON Schema (Show Data):** The single source of truth for show structure.
+- **JSON Schema (Show Data):** The single source of truth for show structure (`schema/show-event.schema.json`, `schema/wire-message.schema.json`).
 - **ShowEvent Messages:** Describe real-time changes (cue advance, mic swap).
 - **Frontend Views:** Role-based UIs for Director, Stage Manager, Performer.
 - **Backend:** Receives, validates, sequences, and broadcasts ShowEvents.
