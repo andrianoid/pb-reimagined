@@ -127,3 +127,6 @@ Want me to:
 - add **QLab/OSC/MIDI** adapter event types (even if Phase 2), or
     
 - generate a **minimal Node/Express + ws stub** that validates messages against this schema and broadcasts?
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).
