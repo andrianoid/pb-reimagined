@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/show-event.schema.json",
+  "title": "ShowEvent",
+  "type": "object",
+  "required": [
+    "kind",
+    "version",
+    "messageId",
+    "eventType",
+    "showId",
+    "createdAt",
+    "actor",
+    "payload"
+  ],
+  "properties": {
+    "kind": { "const": "event" },
+    "version": { "type": "string" },
+    "messageId": { "type": "string", "format": "uuid" },
+    "correlationId": { "type": "string", "format": "uuid" },
+    "causationId": { "type": "string", "format": "uuid" },
+    "showId": { "type": "string" },
+    "eventType": {
+      "type": "string",
+      "enum": [
+        "CueAdvanced",
+        "CueReverted",
+        "MicSwapped",
+        "MicAssigned",
+        "SegmentReordered",
+        "NoteAdded",
+        "NoteUpdated",
+        "NoteDeleted",
+        "TimerStarted",
+        "TimerPaused",
+        "TimerReset",
+        "TimerSetOverride",
+        "EmergencyTriggered",
+        "EmergencyResolved",
+        "SnapshotRequested",
+        "ClientPresenceUpdated"
+      ]
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "actor": { "$ref": "#/$defs/actor" },
+    "eventSeq": { "type": "integer", "minimum": 0 },
+    "payload": { "type": "object" },
+    "patch": { "$ref": "#/$defs/jsonPatch" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "actor": {
+      "type": "object",
+      "required": ["userId", "role", "deviceId"],
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string" },
+        "deviceId": { "type": "string" },
+        "displayName": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "timecode": {
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
+    },
+    "jsonPatch": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["op", "path"],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove",
+              "replace",
+              "move",
+              "copy",
+              "test"
+            ]
+          },
+          "path": { "type": "string" },
+          "from": { "type": "string" },
+          "value": {}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

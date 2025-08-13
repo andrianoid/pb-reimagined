@@ -3,9 +3,11 @@
 [[pbr-Personas]]
 [[pbr-ArchitectureOverview]]
 pbr-Schema:
-- **[[ShowEvent Envelope]] (event-only) JSON Schema v1.0.0**      
-- **[[Wire Messages]] (event/ack/snapshot/heartbeat/error) JSON Schema v1.0.0**      
-- **[[Examples (JSONL)]] for contract tests & dev stubs**  
+- **ShowEvent Schema**: `schema/show-event.schema.json`
+- **Wire Message Schema**: `schema/wire-message.schema.json`
+- **Examples (JSONL)** for contract tests & dev stubs
+
+Use these schemas with a Draft 2020-12 validator (e.g., [Ajv](https://ajv.js.org)) to validate messages on the wire.
 [[pbr-MVP_Plan]]
 ![[pacebuddy_mvp_event_flow.png]]
 

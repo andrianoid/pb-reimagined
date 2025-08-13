@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/wire-message.schema.json",
+  "title": "WireMessage",
+  "oneOf": [
+    { "$ref": "show-event.schema.json" },
+    { "$ref": "#/$defs/ack" },
+    { "$ref": "#/$defs/snapshot" },
+    { "$ref": "#/$defs/heartbeat" },
+    { "$ref": "#/$defs/error" }
+  ],
+  "$defs": {
+    "ack": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "ackOf", "status", "createdAt"],
+      "properties": {
+        "kind": { "const": "ack" },
+        "version": { "type": "string" },
+        "messageId": { "type": "string", "format": "uuid" },
+        "ackOf": { "type": "string", "format": "uuid" },
+        "status": { "type": "string", "enum": ["ok", "error"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "eventSeq": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "showId", "createdAt", "lastEventSeq", "state"],
+      "properties": {
+        "kind": { "const": "snapshot" },
+        "version": { "type": "string" },
+        "messageId": { "type": "string", "format": "uuid" },
+        "showId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastEventSeq": { "type": "integer", "minimum": 0 },
+        "state": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "heartbeat": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "createdAt"],
+      "properties": {
+        "kind": { "const": "heartbeat" },
+        "version": { "type": "string" },
+        "messageId": { "type": "string", "format": "uuid" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": ["kind", "version", "messageId", "code", "createdAt"],
+      "properties": {
+        "kind": { "const": "error" },
+        "version": { "type": "string" },
+        "messageId": { "type": "string", "format": "uuid" },
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "timecode": {
+      "type": "string",
+      "pattern": "^\\d{2}:\\d{2}:\\d{2}\\.\\d{3}$"
+    },
+    "jsonPatch": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["op", "path"],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": ["add", "remove", "replace", "move", "copy", "test"]
+          },
+          "path": { "type": "string" },
+          "from": { "type": "string" },
+          "value": {}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
