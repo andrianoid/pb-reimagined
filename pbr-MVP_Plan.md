@@ -1,5 +1,10 @@
 # PaceBuddy MVP Plan
 
+## Wireframe Quick Links
+- [Director View](design/director_view_wireframe.png)
+- [Stage Manager View](design/stage_manager_view_wireframe.png)
+- [Performer View](design/performer_view_wireframe.png)
+
 ## Phase 0: Foundation
 - [ ] Finalize ShowEvent and wire message schemas.
 - [ ] Create clickable Figma prototypes for all three persona views.
